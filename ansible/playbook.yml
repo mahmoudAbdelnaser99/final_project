@@ -1,0 +1,26 @@
+- name: Install Docker and Configure Application
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update and install packages
+      apt:
+        update_cache: yes
+        name: ["docker.io", "python3-pip"]
+        state: present
+
+    - name: Add EC2 User to Docker Group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+
+    - name: Pull and run Docker application
+      shell: |
+        docker load < /home/ec2-user/app.tar
+        docker run -d -p 4000:4000 my-dockerized-app
