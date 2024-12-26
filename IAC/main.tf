@@ -4,6 +4,7 @@ module "vpc" {
   name   = module.vpc.vpc_name
   vpc_cidr_block = var.vpc_cidr_block 
   vpc_tags = var.vpc_tags
+  public_subnet_ids = module.subnet.public_subnets
   
 }
 
