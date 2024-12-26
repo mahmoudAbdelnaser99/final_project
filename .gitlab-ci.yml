@@ -1,0 +1,21 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_IMAGE: "my-dockerized-app"
+
+build:
+  stage: build
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker save $DOCKER_IMAGE > app.tar
+  artifacts:
+    paths:
+      - app.tar
+
+deploy:
+  stage: deploy
+  script:
+    - scp app.tar ec2-user@<EC2-PUBLIC-IP>:~/app.tar
+    - ssh ec2-user@<EC2-PUBLIC-IP> "docker load < ~/app.tar && docker run -d -p 4000:4000 $DOCKER_IMAGE"
