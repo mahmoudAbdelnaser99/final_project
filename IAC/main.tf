@@ -34,7 +34,3 @@ module "ec2" {
   
   instance_tags = var.instance_tags
 }
-
-output "instance_public_ip" {
-  value = module.ec2.public_ip
-}
